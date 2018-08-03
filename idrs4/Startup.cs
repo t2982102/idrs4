@@ -45,7 +45,7 @@ namespace idrs4
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc();
-            
+
             // configure identity server with in-memory stores, keys, clients and scopes
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()

@@ -10,7 +10,7 @@ namespace TianTianWebAPI.Areas.HelpPage.Controllers
     /// The controller that will handle requests for the help page.
     /// </summary>
     /// 
-    
+    [System.Web.Mvc.Authorize]
     public class HelpController : Controller
     {
         private const string ErrorViewName = "Error";

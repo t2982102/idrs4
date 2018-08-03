@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace TianTianWebAPI.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         // GET: Account

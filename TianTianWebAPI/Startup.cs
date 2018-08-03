@@ -8,6 +8,7 @@ using IdentityServer3.AccessTokenValidation;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.OAuth;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
 
@@ -19,7 +20,7 @@ namespace TianTianWebAPI
     {
         public void Configuration(IAppBuilder app)
         {
-
+            //JwtSecurityTokenHandler.InboundClaimTypeMap.Clear();
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = CookieAuthenticationDefaults.AuthenticationType
@@ -28,17 +29,17 @@ namespace TianTianWebAPI
             {
                 AuthenticationType = "oidc",
                 SignInAsAuthenticationType = "Cookies",
-               // RequireHttpsMetadata=false,
+                // RequireHttpsMetadata=false,
                 Authority = "http://localhost:5000/",
                 //RequireHttpsMetadata = false,
                 RedirectUri = "http://localhost:5001/signin-oidc",
-                
+
 
                 ClientId = "mvc4",
                 ClientSecret = "secret",
                 ResponseType = "code id_token token",
                 PostLogoutRedirectUri = "http://localhost:5001/",
-                CallbackPath= new PathString("/Account/LogoutByServer"),
+                //CallbackPath= new PathString("/Account/LogoutByServer"),
                 Scope = "openid profile api1 offline_access",
 
                 Notifications = new OpenIdConnectAuthenticationNotifications
@@ -67,20 +68,11 @@ namespace TianTianWebAPI
                     }
                 }
             });
-
-            //app.UseWsFederationAuthentication(new WsFederationAuthenticationOptions
-            //{
-            //    MetadataAddress = "http://localhost:5000/wsfederation",
-            //    Wtrealm = "urn:owinrp",
-
-            //    SignInAsAuthenticationType = "Cookies"
-            //});
-
-
             app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
             {
+
                 Authority = "http://localhost:5000",
-                //ValidationMode = ValidationMode.ValidationEndpoint,
+                //ClientId = "Api1",
                 RequiredScopes = new[] { "api1" }
             });
 

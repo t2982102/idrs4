@@ -26,7 +26,7 @@ namespace idrs4.Configuration
                     },
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes = { "api1", "api2.read_only" }
+                    AllowedScopes = { "api1" }
                 },
 
                 ///////////////////////////////////////////

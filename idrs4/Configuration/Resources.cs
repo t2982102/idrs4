@@ -39,12 +39,27 @@ namespace idrs4.Configuration
         {
             return new[]
             {
-                // simple version with ctor
-                new ApiResource("api1", "Some API 1")
+                new ApiResource
                 {
-                    // this is needed for introspection when using reference tokens
-                    ApiSecrets = { new Secret("secret".Sha256()) }
+                    Name="api1",
+                    DisplayName="My Api1",
+
+                    Scopes ={
+                        new Scope
+                        {
+                          Name = "api1.sampleApi",
+                          DisplayName = "sampleApi"
+                        },
+                        new Scope
+                        {
+                          Name = "api1",
+                          DisplayName = "testapi1"
+                        }
+
+                    } 
+
                 },
+                // simple version with ctor
                 
                 // expanded version if more control is needed
                 new ApiResource
@@ -64,7 +79,7 @@ namespace idrs4.Configuration
 
                     Scopes =
                     {
-                        new Scope()
+                        new Scope
                         {
                             Name = "api2.full_access",
                             DisplayName = "Full access to API 2"
