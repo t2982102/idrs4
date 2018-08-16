@@ -3,6 +3,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using TianTianWebAPI.Areas.HelpPage.ModelDescriptions;
 using TianTianWebAPI.Areas.HelpPage.Models;
+using TianTianWebAPI.filter;
 
 namespace TianTianWebAPI.Areas.HelpPage.Controllers
 {
@@ -10,7 +11,7 @@ namespace TianTianWebAPI.Areas.HelpPage.Controllers
     /// The controller that will handle requests for the help page.
     /// </summary>
     /// 
-    [System.Web.Mvc.Authorize]
+    [Auth(Roles ="“ª∞„”√ªß")]
     public class HelpController : Controller
     {
         private const string ErrorViewName = "Error";

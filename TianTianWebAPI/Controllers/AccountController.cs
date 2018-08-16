@@ -26,6 +26,15 @@ namespace TianTianWebAPI.Controllers
             //return View();
             return Redirect("/");
         }
+
+        [HttpGet]
+        public ActionResult AccessDenied()
+        {
+            return View();
+        }
+
+
+
         [AllowAnonymous]
         [HttpGet]
         public ActionResult LogoutByServer(string sid)

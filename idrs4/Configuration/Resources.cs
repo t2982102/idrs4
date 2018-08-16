@@ -17,9 +17,9 @@ namespace idrs4.Configuration
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Email(),
-
                 // custom identity resource with some consolidated claims
-                new IdentityResource("custom.profile", new[] { JwtClaimTypes.Name, JwtClaimTypes.Email, "location" })
+                new IdentityResource("custom.profile", new[] { JwtClaimTypes.Name, JwtClaimTypes.Email,JwtClaimTypes.Role, "ClientId","permission" }),
+               
             };
         }
 
@@ -47,15 +47,10 @@ namespace idrs4.Configuration
                     Scopes ={
                         new Scope
                         {
-                          Name = "api1.sampleApi",
-                          DisplayName = "sampleApi"
-                        },
-                        new Scope
-                        {
-                          Name = "api1",
-                          DisplayName = "testapi1"
+                            Name = "api1",
+                            DisplayName = "API1 access",
+                            Description = "My API",
                         }
-
                     } 
 
                 },

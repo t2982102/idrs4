@@ -48,7 +48,11 @@ namespace TianTianWebAPI
                     {
                         notification.AuthenticationTicket.Identity.AddClaim(new Claim("id_token", notification.ProtocolMessage.IdToken));
                         notification.AuthenticationTicket.Identity.AddClaim(new Claim("access_token", notification.ProtocolMessage.AccessToken));
+                        //notification.AuthenticationTicket.Identity.AddClaims(notification.OwinContext.Authentication.User.Claims);
+                        //notification.AuthenticationTicket.Identity.AddClaims(notification.AuthenticationTicket.Identity.FindAll("role"));
 
+                        //notification.AuthenticationTicket.Identity.AddClaim(notification.AuthenticationTicket.Identity.FindFirst("role"));
+                        //notification.AuthenticationTicket.Identity.AddClaim(new Claim("role",notification.OwinContext.Authentication))
                         return Task.FromResult(0);
                     },
 
@@ -64,6 +68,14 @@ namespace TianTianWebAPI
                                 notification.ProtocolMessage.IdTokenHint = idTokenHint.Value;
                             }
                         }
+                        //if (notification.ProtocolMessage.RequestType == OpenIdConnectRequestType.AuthenticationRequest)
+                        //{
+                        //    var roles = notification.OwinContext.Authentication.User.FindAll("role");
+                        //    if (roles != null)
+                        //    {
+                        //        //notification.ProtocolMessage.
+                        //    }
+                        //}
                         return Task.FromResult(0);
                     }
                 }

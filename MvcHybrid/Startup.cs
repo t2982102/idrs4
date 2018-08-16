@@ -33,6 +33,7 @@ namespace MvcHybrid
                 {
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
                     options.Cookie.Name = "Cookies";
+                    options.AccessDeniedPath = "/Home/AccessDenied";
                 })
                 .AddOpenIdConnect("oidc", options =>
                 {
@@ -50,7 +51,7 @@ namespace MvcHybrid
                     options.Scope.Add("email");
                     options.Scope.Add("api1");
                     options.Scope.Add("offline_access");
-
+                    options.Scope.Add("custom.profile");
                     options.ClaimActions.Remove("amr");
                     options.ClaimActions.MapJsonKey("website", "website");
 

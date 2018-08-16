@@ -16,6 +16,8 @@ namespace idrs4.Models.AccountViewModels
         [Display(Name = "角色标识")]
         public string NormalizedName { get; set; }
 
-        
+        [Required]
+        [Display(Name ="客户端标识")]
+        public string ClientName { get; set; }
     }
 }

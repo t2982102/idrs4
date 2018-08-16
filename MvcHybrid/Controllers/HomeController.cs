@@ -28,12 +28,16 @@ namespace MvcHybrid.Controllers
             return View();
         }
 
-        [Authorize]
+        [Authorize(Roles ="一般用户")]
         public IActionResult Secure()
         {
             return View();
         }
-
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
         [Authorize]
         public async Task<IActionResult> CallApi()
         {

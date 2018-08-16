@@ -2,6 +2,8 @@
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Test;
+using idrs4.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -15,22 +17,26 @@ namespace idrs4.Configuration
         /// <summary>
         /// The logger
         /// </summary>
-        protected readonly ILogger Logger;
-
+        //protected readonly ILogger Logger;
+        private readonly IUserClaimsPrincipalFactory<ApplicationUser> _claimsFactory;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         /// <summary>
         /// The users
         /// </summary>
-        protected readonly TestUserStore Users;
+        //protected readonly TestUserStore Users;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TestUserProfileService"/> class.
         /// </summary>
         /// <param name="users">The users.</param>
         /// <param name="logger">The logger.</param>
-        public CustomProfileService(TestUserStore users, ILogger<TestUserProfileService> logger)
+        public CustomProfileService(IUserClaimsPrincipalFactory<ApplicationUser> claimsFactory, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
-            Users = users;
-            Logger = logger;
+            _claimsFactory = claimsFactory;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            //Logger = logger;
         }
 
         /// <summary>
@@ -38,26 +44,40 @@ namespace idrs4.Configuration
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns></returns>
-        public virtual Task GetProfileDataAsync(ProfileDataRequestContext context)
+        public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            context.LogProfileRequest(Logger);
-
-            //判断是否有请求Claim信息
-            if (context.RequestedClaimTypes.Any())
+            //context.LogProfileRequest(Logger);
+            var sub = context.Subject.GetSubjectId();
+            var user = await _userManager.FindByIdAsync(sub);
+            if (user == null)
             {
-                //根据用户唯一标识查找用户信息
-                var user = Users.FindBySubjectId(context.Subject.GetSubjectId());
-                if (user != null)
-                {
-                    //调用此方法以后内部会进行过滤，只将用户请求的Claim加入到 context.IssuedClaims 集合中 这样我们的请求方便能正常获取到所需Claim
+                throw new ArgumentException("查无此用户~");
+                //context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, "invalid custom credential");
+            }
+            var principal = await _claimsFactory.CreateAsync(user);
+            var claims = principal.Claims.ToList();
 
-                    context.AddRequestedClaims(user.Claims);
+            //Add more claims like this
+            //claims.Add(new System.Security.Claims.Claim("MyProfileID", user.Id));
+
+            
+            var Roles = await _userManager.GetRolesAsync(user);
+            foreach (var role in Roles)
+            {
+
+                
+                if (context.Client.ClientId == "mvc4")
+                {
+                    claims.Add(new System.Security.Claims.Claim("role", role));
+                    var roleclaim = await _roleManager.GetClaimsAsync(await _roleManager.FindByNameAsync(role));
+                    claims.AddRange(roleclaim);
                 }
             }
+            //这个方法是向所有client 下发相应的claims
+            context.IssuedClaims = claims;
+            //context.LogIssuedClaims(Logger);
 
-            context.LogIssuedClaims(Logger);
-
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
         }
 
         /// <summary>
@@ -65,14 +85,14 @@ namespace idrs4.Configuration
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns></returns>
-        public virtual Task IsActiveAsync(IsActiveContext context)
+        public async Task IsActiveAsync(IsActiveContext context)
         {
-            Logger.LogDebug("IsActive called from: {caller}", context.Caller);
+            //Logger.LogDebug("IsActive called from: {caller}", context.Caller);
 
-            var user = Users.FindBySubjectId(context.Subject.GetSubjectId());
-            context.IsActive = user?.IsActive == true;
 
-            return Task.CompletedTask;
+            var sub = context.Subject.GetSubjectId();
+            var user = await _userManager.FindByIdAsync(sub);
+            context.IsActive = user != null;
         }
     }
 }

@@ -19,6 +19,11 @@
                 <input asp-for="NormalizedName" class="form-control" />
                 <span asp-validation-for="NormalizedName" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="ClientName">客户端标识</label>
+                <input asp-for="ClientName" class="form-control" />
+                <span asp-validation-for="ClientName" class="text-danger"></span>
+            </div>
             <button type="submit" class="btn btn-default">注  册</button>
         </form>
     </div>

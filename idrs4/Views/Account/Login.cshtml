@@ -1,97 +1,152 @@
-﻿@*@using System.Collections.Generic
-    @using System.Linq
-    @using Microsoft.AspNetCore.Http
-    @using Microsoft.AspNetCore.Http.Authentication*@
-@model LoginViewModelidrs4
-@*@inject SignInManager<ApplicationUser> SignInManager*@
+﻿@model LoginViewModelidrs4
 
 @{
 
-    ViewData["Title"] = "登    录";
+    Layout = null;
 }
 
-<h2>@ViewData["Title"]</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;text/javascript; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    @*<meta name="viewport" content="width=device-width, initial-scale=1">*@
 
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            @*<form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">*@
-            <form asp-route="Login">
-                <input type="hidden" asp-for="ReturnUrl" />
-                @*<h4>Use a local account to log in.</h4>*@
-                <hr />
-                @Html.Partial("_ValidationSummary")
-                <div class="form-group">
-                    <label asp-for="Username">用户名</label>
-                    <input asp-for="Username" class="form-control" placeholder="Username" autofocus />
-                    <span asp-validation-for="Username" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Password">密码</label>
-                    <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label asp-for="RememberLogin">
-                            <input asp-for="RememberLogin" />
-                            @Html.DisplayNameFor(m => m.RememberLogin)
-                        </label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-default">登    录</button>
-                </div>
-                <div class="form-group">
-                    <p>
-                        <a asp-action="ForgotPassword">忘记密码?</a>
-                    </p>
-                    <p>
-                        <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">注册一个新账号</a>
-                    </p>
-                </div>
-            </form>
-        </section>
-    </div>
-    @*这里是非本地用户 登录 例如QQ Facebook等登录 暂时不用！*@
-    @*<div class="col-md-6 col-md-offset-2">
-            <section>
-                <h4>Use another service to log in.</h4>
-                <hr />
-                @{
-                    var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-                    if (loginProviders.Count == 0)
-                    {
-                        <div>
-                            <p>
-                                There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-                                for details on setting up this ASP.NET application to support logging in via external services.
-                            </p>
+
+    <title>天天后台管理系统</title>
+
+    <!-- Bootstrap -->
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="~/lib/nprogress/nprogress.css" rel="stylesheet">
+
+    <!-- Animate.css -->
+    <link href="~/lib/animate.css/animate.min.css" rel="stylesheet">
+    <link href="~/lib/pnotify/dist/pnotify.css" rel="stylesheet">
+    <link href="~/lib/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+    <link href="~/lib/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="~/css/custom.css" rel="stylesheet">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/pnotify/dist/pnotify.js"></script>
+    <script src="~/lib/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="~/lib/pnotify/dist/pnotify.nonblock.js"></script>
+</head>
+
+<body class="login3">
+    @if (ViewContext.ModelState.IsValid == false)
+    {
+        <input type="hidden" id="errormsg" name="errormsg" value="@ViewContext.ModelState.Values.First().Errors[0].ErrorMessage"/>
+    }
+
+    <div class="container">
+        <div class="row row-centered">
+            <div class="well col-md-4 col-centered opacitybackground">
+                <section class="login_content">
+                    <form asp-route="Login" id="form_login" class=" form-label-left input_mask">
+                        <input type="hidden" asp-for="ReturnUrl" />
+                        <h1>登    录</h1>
+                        <div class="row">
+                            <div class="has-feedback col-md-6 col-md-offset-3">
+
+                                <input asp-for="Username" class="form-control has-feedback-left" placeholder="Username" autofocus />
+                                <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                               
+                            </div>
+                            <div class=" has-feedback col-md-6 col-md-offset-3">
+                                <input type="password" class="form-control has-feedback-left" placeholder="Password" asp-for="Password" autocomplete="off" />
+                                <span class="fa fa-unlock-alt form-control-feedback left" aria-hidden="true"></span>
+                               
+                            </div>
+                            <div class="checkbox  has-feedback col-md-6 col-md-offset-3 ">
+                                <label for="RememberLogin">
+                                    <input asp-for="RememberLogin" />
+                                    记住我的登录！
+                                </label>
+                                @*<label asp-for="RememberLogin">
+                                    <input asp-for="RememberLogin" />
+                                    @Html.DisplayNameFor(m => m.RememberLogin)
+                                </label>*@
+                            </div>
                         </div>
-                    }
-                    else
-                    {
-                        <form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-                            <div>
+                        <div>
+                            <button class="btn  btn-default" name="button" value="login" id="submitlogin">登    录</button>
+                            <button class="btn  btn-default" name="button" value="cancel">取   消</button>
+
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="separator">
+                            <p class="change_link">
+                                <a asp-action="ForgotPassword">忘记密码?</a>
+                                <a asp-action="Register" class="to_register">注册一个新账号</a>
+
+                            </p>
+
+                            <div class="clearfix"></div>
+                            <br />
+
+                            <div class="copyrightText">
+
                                 <p>
-                                    @foreach (var provider in loginProviders)
-                                    {
-                                        <button type="submit" class="btn btn-default" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
-                                    }
+                                    Copyright(C)2017 <a href="https://www.aytiantian0502.com">aytiantian0502.com</a> All Rights Reserved<br />
+                                    天天易拉罐 版权所有 豫ICP备17024774号-1
                                 </p>
                             </div>
-                        </form>
-                    }
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#submitlogin").click(function () {
+                var username = $("#Username").val();
+                var password = $("#Password").val();
+                if (username.trim().replace(/(^s*)|(s*$)/g, "").length == 0) {
+                    notice("错误！", "error", "用户名不能为空！");
+                    $("#Username").focus();
                 }
-            </section>
-        </div>*@
+                if (password.trim().replace(/(^s*)|(s*$)/g, "").length == 0) {
+                    notice("错误！", "error", "密码不能为空！");
+                    $("#Password").focus();
+                }
+
+            });
+
+
+            if (!$("#errormsg").val() == "") { 
+                notice("错误！", "error", $("#errormsg").val());
+                //console.log($("#errormsg").val());
+            }
+            
+        });
+        function notice(title,type,msg) { 
+            new PNotify({
+                title: title,
+                text: msg,
+                type: type,
+                hide: true,
+                styling: 'bootstrap3'
+            });
+        }
+    </script>
+</body>
+</html>
 
 
 
 
-
-</div>
-
-@section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
-}

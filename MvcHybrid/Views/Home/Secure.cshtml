@@ -11,6 +11,7 @@
     var it = await Context.GetTokenAsync("id_token");
     var at = await Context.GetTokenAsync("access_token");
     var rt = await Context.GetTokenAsync("refresh_token");
+    var customer = await Context.GetTokenAsync("custom.profile");
 }
 
 <div>
@@ -30,7 +31,13 @@
             <dt>refresh_token</dt>
             <dd>@rt</dd>
         }
-        @foreach (var claim in User.Claims)
+        @if (customer != null)
+        { 
+
+            <dt>customer</dt>
+            <dd>@customer</dd>
+        }
+        @foreach (var claim in  User.Claims)
         {
             <dt>@claim.Type</dt>
             <dd>@claim.Value</dd>

@@ -26,6 +26,7 @@ namespace idrs4.Configuration
                     },
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    
                     AllowedScopes = { "api1" }
                 },
 
@@ -172,13 +173,17 @@ namespace idrs4.Configuration
                     FrontChannelLogoutSessionRequired=true,
                     //RedirectUris = { "http://172.16.5.69:5001/signin-oidc" },
                     //PostLogoutRedirectUris = { "http://172.16.5.69:5001/signout-callback-oidc" },
-                    
+                     AlwaysSendClientClaims=true,
+                    AlwaysIncludeUserClaimsInIdToken=true,
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        "custom.profile",
                         "api1"
                     },
+                    
                     AllowOfflineAccess = true
 
                 },
@@ -198,12 +203,15 @@ namespace idrs4.Configuration
                     RedirectUris =  { "http://localhost:5003/signin-oidc" },
                     FrontChannelLogoutUri = "http://localhost:5003/signout-oidc",
                     PostLogoutRedirectUris = { "http://localhost:5003/signout-callback-oidc" },
-
+                     AlwaysSendClientClaims=true,
+                    AlwaysIncludeUserClaimsInIdToken=true,
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        "custom.profile",
                         "api1", "api2.read_only"
                     }
                 },
@@ -264,12 +272,15 @@ namespace idrs4.Configuration
                     PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-
+                    AlwaysSendClientClaims=true,
+                    AlwaysIncludeUserClaimsInIdToken=true,
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        "custom.profile",
                         "api1", "api2.read_only"
                     }
                 },
