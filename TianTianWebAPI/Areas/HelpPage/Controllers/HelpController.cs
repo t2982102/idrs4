@@ -11,7 +11,7 @@ namespace TianTianWebAPI.Areas.HelpPage.Controllers
     /// The controller that will handle requests for the help page.
     /// </summary>
     /// 
-    [Auth(Roles ="“ª∞„”√ªß")]
+    
     public class HelpController : Controller
     {
         private const string ErrorViewName = "Error";

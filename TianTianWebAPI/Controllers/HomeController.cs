@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TianTianWebAPI.filter;
 
 namespace TianTianWebAPI.Controllers
 {
@@ -10,7 +11,7 @@ namespace TianTianWebAPI.Controllers
     public class HomeController : Controller
     {
         
-        [Authorize]
+        [AuthAttribute(permission ="mvc4.view")]
         public ActionResult Index()
         {
             //ViewBag.Title = "Home Page";
