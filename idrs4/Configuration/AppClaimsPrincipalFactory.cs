@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace idrs4.Configuration
 {
-    public class AppClaimsPrincipalFactory : UserClaimsPrincipalFactory<ApplicationUser, ApplicationRole>
+    // 这个是添加方法 20180817 废除 该方法已经被UserClaimsPrincipal所替代，写的不够灵活
+    public class AppClaimsPrincipalFactory : UserClaimsPrincipalFactory<ApplicationUser,ApplicationRole>
     {
         public AppClaimsPrincipalFactory(UserManager<ApplicationUser> userManager,
-           RoleManager<ApplicationRole> roleManager,
+            RoleManager<ApplicationRole> roleManager,
            IOptions<IdentityOptions> optionsAccessor) : base(userManager, roleManager, optionsAccessor)
         {
         }
@@ -20,7 +21,15 @@ namespace idrs4.Configuration
         public async override Task<ClaimsPrincipal> CreateAsync(ApplicationUser user)
         {
             var principal = await base.CreateAsync(user);
-            
+
+            //var myprincipal = ((ClaimsIdentity)principal.Identity).Claims;
+            //var rolenamelist=await UserManager.GetRolesAsync(user);
+            //foreach (var rolename in rolenamelist)
+            //{
+            //    var role = await RoleManager.FindByNameAsync(rolename);
+            //    ((ClaimsIdentity)principal.Identity).AddClaims(new[] { new Claim("ClientId",role.ClientName )});
+            //}
+
             return principal;
         }
     }

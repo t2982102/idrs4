@@ -15,6 +15,10 @@ using idrs4.Configuration;
 using System.Reflection;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
+using idrs4.Filter;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using idrs4.Services.UserInteraction;
 
 namespace idrs4
 {
@@ -41,11 +45,13 @@ namespace idrs4
                 option.Password.RequireNonAlphanumeric = false;
             })
                 //.AddRoles<IdentityRole>()
-                
-                .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory<ApplicationUser>>()
+                //20180817 已经被废除自带的工厂类方法不够灵活 被.AddClaimsPrincipalFactory<UserClaimsPrincipal>()替代
+                //与services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, AppClaimsPrincipalFactory>();配合使用
+                //.AddClaimsPrincipalFactory<UserClaimsPrincipalFactory<ApplicationUser>>()
+                .AddClaimsPrincipalFactory<UserClaimsPrincipal>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
+            services.AddScoped<IUserStoreService, UserStoreService>();
             #region 跨域
             services.AddCors(options =>
             {
@@ -63,8 +69,17 @@ namespace idrs4
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc();
-            // 该方法是将所有用户Claim发送给客户端
+            //services.AddMvc(options => {
+            //    options.Filters.Add<MyAuthorizationFilter>();
+            //});
+
+            // 该方法是将所有用户Claim发送给客户端 配合.AddClaimsPrincipalFactory<UserClaimsPrincipalFactory<ApplicationUser>>()一起使用 20180817 废除写的不够灵活
             //services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, AppClaimsPrincipalFactory>();
+
+            //注入构建session服务 用于单独管理
+            services.AddDistributedMemoryCache();
+            services.AddSession();
+
             // configure identity server with in-memory stores, keys, clients and scopes
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
@@ -99,7 +114,7 @@ namespace idrs4
                 .AddResourceOwnerValidator<CustomResourceOwnerPasswordValidator>()
                 //.AddAspNetIdentity<IdentityRole>()
                 .AddJwtBearerClientAuthentication();
-            
+
 
         }
 
@@ -122,11 +137,12 @@ namespace idrs4
 
             app.UseStaticFiles();
 
-            // app.UseAuthentication(); // not needed, since UseIdentityServer adds the authentication middleware
+            app.UseAuthentication(); // not needed, since UseIdentityServer adds the authentication middleware
             app.UseIdentityServer();
 
             app.UseMvc(routes =>
             {
+                
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

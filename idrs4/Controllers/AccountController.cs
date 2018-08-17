@@ -23,6 +23,7 @@ using IdentityServer4.Stores;
 using System.Security.Principal;
 using Microsoft.AspNetCore.Http;
 using IdentityServer4.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace idrs4.Controllers
 {
@@ -111,15 +112,54 @@ namespace idrs4.Controllers
             }
 
             if (ModelState.IsValid)
-            {
+                {
+
+
+
+                //var user = await _userManager.FindByNameAsync(model.Username);
+                //if (user == null)
+                //{
+                //    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
+
+                //    ModelState.AddModelError("", "账号密码错误！");
+                //}
+                //else
+                //{
+                //    if (await _userManager.CheckPasswordAsync(user, model.Password))
+                //    {
+                //        //var claimsIdentity = await _signInManager.CreateUserPrincipalAsync(user);
+                //        //ClaimsPrincipal claimsIdentity = new ClaimsPrincipal();
+
+                //        var identity = new ClaimsIdentity();
+                //        var Rolesnames = await _userManager.GetRolesAsync(user);
+                //        foreach (var rolename in Rolesnames)
+                //        {
+                //            var role = await _roleMangeer.FindByNameAsync(rolename);
+
+                //            identity.AddClaims(new[] { new Claim("ClientId", role.ClientName) });
+                //        }
+                //        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsIdentity);
+                //        await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName));
+                //        if (_interaction.IsValidReturnUrl(model.ReturnUrl) || Url.IsLocalUrl(model.ReturnUrl))
+                //        {
+                //            return Redirect(model.ReturnUrl);
+                //        }
+
+                //        return Redirect("~/");
+                //    }
+                //    else
+                //    {
+                //        await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
+
+                //        ModelState.AddModelError("", "账号密码错误！");
+                //    }
+                //}
+
                 var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     var user = await _userManager.FindByNameAsync(model.Username);
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName));
-
-                    // make sure the returnUrl is still valid, and if so redirect back to authorize endpoint or a local page
-                    // the IsLocalUrl check is only necessary if you want to support additional local pages, otherwise IsValidReturnUrl is more strict
                     if (_interaction.IsValidReturnUrl(model.ReturnUrl) || Url.IsLocalUrl(model.ReturnUrl))
                     {
                         return Redirect(model.ReturnUrl);
@@ -132,9 +172,9 @@ namespace idrs4.Controllers
 
                 ModelState.AddModelError("", "账号密码错误！");
             }
-            var vm = await BuildLoginViewModelAsync(model);
-            // If we got this far, something failed, redisplay form
-            return View(vm);
+                var vm = await BuildLoginViewModelAsync(model);
+                // If we got this far, something failed, redisplay form
+                return View(vm);
         }
 
         [HttpGet]

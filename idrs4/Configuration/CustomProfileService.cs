@@ -62,14 +62,15 @@ namespace idrs4.Configuration
 
             
             var Roles = await _userManager.GetRolesAsync(user);
-            foreach (var role in Roles)
+            foreach (var rolename in Roles)
             {
 
+                var role =await _roleManager.FindByNameAsync(rolename);
                 
-                if (context.Client.ClientId == "mvc4")
+                if (role.ClientName==context.Client.ClientId)
                 {
-                    claims.Add(new System.Security.Claims.Claim("role", role));
-                    var roleclaim = await _roleManager.GetClaimsAsync(await _roleManager.FindByNameAsync(role));
+                    claims.Add(new System.Security.Claims.Claim("role", rolename));
+                    var roleclaim = await _roleManager.GetClaimsAsync(await _roleManager.FindByNameAsync(rolename));
                     claims.AddRange(roleclaim);
                 }
             }

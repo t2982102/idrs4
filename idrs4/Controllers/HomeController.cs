@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using idrs4.Models;
 using Microsoft.AspNetCore.Authorization;
+using idrs4.Filter;
 
 namespace idrs4.Controllers
 {
-    [Authorize]
+    
+    
     public class HomeController : Controller
     {
+        [MyAuthorizationFilter(permission = "projects.view")]
         public IActionResult Index()
         {
             return View();
