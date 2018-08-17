@@ -28,6 +28,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 namespace idrs4.Controllers
 {
     [SecurityHeadersAttribute]
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -65,6 +66,7 @@ namespace idrs4.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+
         public async Task<IActionResult> Login(string returnUrl = null)
         {
             //// Clear the existing external cookie to ensure a clean login process
@@ -88,6 +90,7 @@ namespace idrs4.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginInputModel model,string button)
         {
             if (button != "login")
