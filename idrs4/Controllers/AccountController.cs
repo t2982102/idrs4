@@ -24,6 +24,10 @@ using System.Security.Principal;
 using Microsoft.AspNetCore.Http;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using idrs4.Models.bootstrapTableList;
+using idrs4.PoJo;
+using Microsoft.AspNetCore.Hosting;
+using idrs4.Models.ManageViewModels;
 
 namespace idrs4.Controllers
 {
@@ -35,6 +39,7 @@ namespace idrs4.Controllers
         private readonly RoleManager<ApplicationRole> _roleMangeer;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly IHostingEnvironment _hostingEnvironment;
         private readonly ILogger _logger;
         private readonly IClientStore _clientStore;
         private readonly IIdentityServerInteractionService _interaction;
@@ -50,6 +55,7 @@ namespace idrs4.Controllers
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
+            IHostingEnvironment hostingEnvironment,
             IEventService events)
         {
             _userManager = userManager;
@@ -60,6 +66,7 @@ namespace idrs4.Controllers
             _interaction = interaction;
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
+            _hostingEnvironment = hostingEnvironment;
             _events = events;
         }
 
@@ -75,6 +82,7 @@ namespace idrs4.Controllers
             //ViewData["ReturnUrl"] = returnUrl;
             //return View();
 
+            
             var vm = await BuildLoginViewModelAsync(returnUrl);
 
             if (vm.IsExternalLoginOnly)
@@ -116,61 +124,34 @@ namespace idrs4.Controllers
 
             if (ModelState.IsValid)
                 {
-
-
-
-                //var user = await _userManager.FindByNameAsync(model.Username);
-                //if (user == null)
-                //{
-                //    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
-
-                //    ModelState.AddModelError("", "账号密码错误！");
-                //}
-                //else
-                //{
-                //    if (await _userManager.CheckPasswordAsync(user, model.Password))
-                //    {
-                //        //var claimsIdentity = await _signInManager.CreateUserPrincipalAsync(user);
-                //        //ClaimsPrincipal claimsIdentity = new ClaimsPrincipal();
-
-                //        var identity = new ClaimsIdentity();
-                //        var Rolesnames = await _userManager.GetRolesAsync(user);
-                //        foreach (var rolename in Rolesnames)
-                //        {
-                //            var role = await _roleMangeer.FindByNameAsync(rolename);
-
-                //            identity.AddClaims(new[] { new Claim("ClientId", role.ClientName) });
-                //        }
-                //        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsIdentity);
-                //        await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName));
-                //        if (_interaction.IsValidReturnUrl(model.ReturnUrl) || Url.IsLocalUrl(model.ReturnUrl))
-                //        {
-                //            return Redirect(model.ReturnUrl);
-                //        }
-
-                //        return Redirect("~/");
-                //    }
-                //    else
-                //    {
-                //        await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
-
-                //        ModelState.AddModelError("", "账号密码错误！");
-                //    }
-                //}
-
                 var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     var user = await _userManager.FindByNameAsync(model.Username);
-                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName));
-                    if (_interaction.IsValidReturnUrl(model.ReturnUrl) || Url.IsLocalUrl(model.ReturnUrl))
+                    if (user.EmailConfirmed)
                     {
-                        return Redirect(model.ReturnUrl);
+                        await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName));
+                        if (_interaction.IsValidReturnUrl(model.ReturnUrl) || Url.IsLocalUrl(model.ReturnUrl))
+                        {
+                            return Redirect(model.ReturnUrl);
+                        }
+
+                        return Redirect("~/");
                     }
-
-                    return Redirect("~/");
+                    else
+                    {
+                        return Redirect("~/Account/SendConfirmEmail?Email="+user.UserName);
+                    }
+                    
                 }
-
+                if (result.IsLockedOut)
+                {
+                    ModelState.AddModelError("", "登录被锁定，请您5分钟后再登录！");
+                }
+                if (result.IsNotAllowed)
+                {
+                    ModelState.AddModelError("", "登录被锁定，请您5分钟后再登录！");
+                }
                 await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
 
                 ModelState.AddModelError("", "账号密码错误！");
@@ -178,6 +159,46 @@ namespace idrs4.Controllers
                 var vm = await BuildLoginViewModelAsync(model);
                 // If we got this far, something failed, redisplay form
                 return View(vm);
+        }
+        [HttpGet]
+        public IActionResult SendConfirmEmail(string Email)
+        {
+            if (User.Claims.Where(c => c.Type.Equals("email_verified") & c.Value.Equals("true")).Count() > 0)
+            {
+                return new RedirectResult("/");
+            }
+            //User.Claims.Where(c=>c.Type.Equals())
+            ViewBag.email = Email;
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendConfirmEmailByPost(string Username)
+        {
+            Result rs = new Result();
+            if (!ModelState.IsValid)
+            {
+                rs = Result.ErrorResult(-2);
+            }
+
+
+            var user = await _userManager.FindByEmailAsync(Username);
+            //if (user == null)
+            //{
+            //    throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            //}
+
+            //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            //var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+            //var email = user.Email;
+            //await _emailSender.SendEmailConfirmationAsync(email, callbackUrl);
+
+            SendEmailByTianTian sendEmail = new SendEmailByTianTian(_userManager, Url, _emailSender, _hostingEnvironment);
+            await sendEmail.SendEmailByUserIdAsync(user, Request.Scheme);
+            rs = Result.PassResult();
+            rs.ErrorMessage = "验证邮箱信息已发送，请注意查收您的邮箱！";
+            //return RedirectToAction(nameof(Index));
+            return Json(rs);
         }
 
         [HttpGet]
@@ -291,92 +312,44 @@ namespace idrs4.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Lockout()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Register(string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("User created a new account with password.");
-
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
-
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
-                }
-                AddErrors(result);
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
-        [HttpGet]
-        public IActionResult RegisterRole(string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
-        }
-
         
+        public IActionResult Lockout(string ReturnUrl)
+        {
+            var vm =new LockViewModel();
+            vm.ReturnUrl = ReturnUrl;
+            return View(vm);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RegisterRole(RegisterRoleViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Lockout(LockViewModel model)
         {
-            ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var role = new ApplicationRole { Name = model.Name, NormalizedName = model.NormalizedName,ClientName=model.ClientName };
-                var result = await _roleMangeer.CreateAsync(role);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("User created a new role.");
-
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    //await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
-
-                    //await _signInManager.SignInAsync(user, isPersistent: false);
-                    //_logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
-                }
-                AddErrors(result);
+                return View(model);
+            }
+            var user =await _userManager.GetUserAsync(User);
+            if (await _userManager.CheckPasswordAsync(user, model.Password))
+            {
+                return Redirect(model.ReturnUrl);
+            }
+            else
+            {
+                model.errormsg = "密码错误！";
+                return View(model);
             }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            
         }
 
-        [HttpGet]
-        public async Task<IActionResult> UserToRoleByGet(string RoleName)
-        {
-            var user=await _userManager.FindByIdAsync(User.GetSubjectId());
-            var rs= _userManager.AddToRoleAsync(user, RoleName);
-            return Json(rs);
-        }
+
+
+
+
+
+
+
+
 
         [HttpGet]
         public async Task<IActionResult> addRoleClaim(string RoleName,string[] permissions)
@@ -389,26 +362,10 @@ namespace idrs4.Controllers
             return Ok();
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> UserToRole(string returnUrl = null)
-        //{
-        //    ViewData["ReturnUrl"] = returnUrl;
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> UserToRole(string returnUrl = null)
-        //{
-
-
-        //    ViewData["ReturnUrl"] = returnUrl;
-        //    return View();
-        //}
+  
 
         [HttpGet]
-        
+        [AllowAnonymous]
         public async Task<IActionResult> Logout(string logoutId)
         {
             // build a model so the logout page knows what to display
@@ -425,6 +382,7 @@ namespace idrs4.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout(LogoutInputModel model)
         {

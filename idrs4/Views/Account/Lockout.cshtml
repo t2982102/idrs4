@@ -1,8 +1,111 @@
-﻿@{
-    ViewData["Title"] = "Locked out";
+﻿@model LockViewModel
+@{
+    Layout = null;
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;text/javascript; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    @*<meta name="viewport" content="width=device-width, initial-scale=1">*@
 
-<header>
-    <h2 class="text-danger">@ViewData["Title"]</h2>
-    <p class="text-danger">This account has been locked out, please try again later.</p>
-</header>
+
+    <title>天天后台管理系统</title>
+
+    <!-- Bootstrap -->
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="~/lib/nprogress/nprogress.css" rel="stylesheet">
+
+    <!-- Animate.css -->
+    <link href="~/lib/animate.css/animate.min.css" rel="stylesheet">
+    <link href="~/lib/pnotify/dist/pnotify.css" rel="stylesheet">
+    <link href="~/lib/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+    <link href="~/lib/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="~/css/custom.css" rel="stylesheet">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/pnotify/dist/pnotify.js"></script>
+    <script src="~/lib/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="~/lib/pnotify/dist/pnotify.nonblock.js"></script>
+    <script src="~/js/app.js"></script>
+</head>
+
+<body class="login3">
+
+
+    <div class="container">
+        <div class="row row-centered">
+            <div class="well col-md-4 col-centered opacitybackground ">
+                <section class="login_content">
+                    
+                    <form asp-route="Login" id="form_lock" class=" form-label-left input_mask">
+                        <input type="hidden" asp-for="ReturnUrl" />
+                        <input type="hidden" asp-for="errormsg" />
+                        <h1>锁    定</h1>
+                        <div class="row">
+
+                            <div class=" has-feedback col-md-6 col-md-offset-3">
+                                <input type="password" id="password" class="form-control has-feedback-left" placeholder="Password" asp-for="Password" autocomplete="off" />
+                                <span class="fa fa-unlock-alt form-control-feedback left" aria-hidden="true"></span>
+
+                            </div>
+                        </div>
+
+                        <div>
+                            <button class="btn  btn-default" name="button" type="submit" id="submitlock">解    锁</button>
+                            
+
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="separator">
+
+                            <div class="clearfix"></div>
+                            <br />
+
+                            <div class="copyrightText">
+
+                                <p>
+                                    Copyright(C)2017 <a href="https://www.aytiantian0502.com">aytiantian0502.com</a> All Rights Reserved<br />
+                                    天天易拉罐 版权所有 豫ICP备17024774号-1
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#submitlock").click(function () { 
+                var password = $("#password").val();
+                if (password.length == 0) {
+                    notice("错误！", "error", "解锁密码不能为空！");
+                    $("#password").focus();
+                    return false;
+                }
+            })
+            var errormsg = $("#errormsg").val();
+            if (errormsg.length>0) {
+                notice("错误！", "error", "errormsg");
+            }
+
+
+        });
+
+    </script>
+</body>
+</html>

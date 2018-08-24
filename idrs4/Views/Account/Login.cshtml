@@ -39,6 +39,7 @@
     <script src="~/lib/pnotify/dist/pnotify.js"></script>
     <script src="~/lib/pnotify/dist/pnotify.buttons.js"></script>
     <script src="~/lib/pnotify/dist/pnotify.nonblock.js"></script>
+    <script src="~/js/app.js"></script>
 </head>
 
 <body class="login3">
@@ -49,7 +50,7 @@
 
     <div class="container">
         <div class="row row-centered">
-            <div class="well col-md-4 col-centered opacitybackground">
+            <div class="well col-md-4 col-centered opacitybackground ">
                 <section class="login_content">
                     <form asp-route="Login" id="form_login" class=" form-label-left input_mask">
                         <input type="hidden" asp-for="ReturnUrl" />
@@ -134,15 +135,7 @@
             }
             
         });
-        function notice(title,type,msg) { 
-            new PNotify({
-                title: title,
-                text: msg,
-                type: type,
-                hide: true,
-                styling: 'bootstrap3'
-            });
-        }
+
     </script>
 </body>
 </html>

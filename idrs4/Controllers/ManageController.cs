@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using idrs4.Models;
 using idrs4.Models.ManageViewModels;
 using idrs4.Services;
+using Microsoft.AspNetCore.Hosting;
 
 namespace idrs4.Controllers
 {
@@ -23,6 +24,7 @@ namespace idrs4.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly IHostingEnvironment _hostingEnvironment;
         private readonly ILogger _logger;
         private readonly UrlEncoder _urlEncoder;
 
@@ -34,13 +36,15 @@ namespace idrs4.Controllers
           SignInManager<ApplicationUser> signInManager,
           IEmailSender emailSender,
           ILogger<ManageController> logger,
-          UrlEncoder urlEncoder)
+          IHostingEnvironment hostingEnvironment,
+        UrlEncoder urlEncoder)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
             _urlEncoder = urlEncoder;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         [TempData]
@@ -116,16 +120,18 @@ namespace idrs4.Controllers
             }
 
             var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
+            //if (user == null)
+            //{
+            //    throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            //}
 
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-            var email = user.Email;
-            await _emailSender.SendEmailConfirmationAsync(email, callbackUrl);
+            //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            //var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+            //var email = user.Email;
+            //await _emailSender.SendEmailConfirmationAsync(email, callbackUrl);
 
+            SendEmailByTianTian sendEmail = new SendEmailByTianTian(_userManager,Url,_emailSender,_hostingEnvironment);
+            await sendEmail.SendEmailByUserIdAsync(user, Request.Scheme);
             StatusMessage = "Verification email sent. Please check your email.";
             return RedirectToAction(nameof(Index));
         }

@@ -17,6 +17,7 @@ namespace idrs4.Models
     }
     public class ApplicationRole : IdentityRole
     {
+        public string Description { get; set; }
         public string ClientName { get; set; }
     }
 

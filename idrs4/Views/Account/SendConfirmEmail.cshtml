@@ -1,0 +1,145 @@
+﻿
+
+@{
+
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;text/javascript; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    @*<meta name="viewport" content="width=device-width, initial-scale=1">*@
+
+
+    <title>天天后台管理系统</title>
+
+    <!-- Bootstrap -->
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="~/lib/nprogress/nprogress.css" rel="stylesheet">
+
+    <!-- Animate.css -->
+    <link href="~/lib/animate.css/animate.min.css" rel="stylesheet">
+    <link href="~/lib/pnotify/dist/pnotify.css" rel="stylesheet">
+    <link href="~/lib/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+    <link href="~/lib/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="~/css/custom.css" rel="stylesheet">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/pnotify/dist/pnotify.js"></script>
+    <script src="~/lib/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="~/lib/pnotify/dist/pnotify.nonblock.js"></script>
+    <script src="~/js/Validform_v5.3.2_min.js" type="text/javascript"></script>
+    <script src="~/js/app.js"></script>
+</head>
+
+<body class="login3">
+
+
+    <div class="container">
+        <div class="row row-centered">
+            <div class="well col-md-4 col-centered opacitybackground">
+                <section class="login_content">
+                    <form asp-route="Login" id="form_login" class=" form-label-left input_mask">
+                        
+                        <h1>邮 箱 验 证</h1>
+                        <div class="row">
+                            <div class="has-feedback col-md-6 col-md-offset-3">
+                                <label for="Username" id="errormsg">邮箱未注册,请登录您的邮箱确认注册信息！</label>
+                                <input type="email" id="Username" name="Username" class="form-control" datatype="e" nullmsg="用户名不能为空！" errormsg="用户名必须为邮箱地址" sucmsg="用户名格式验证通过！" value="@ViewBag.email" readonly="readonly">
+                                @*<input asp-for="Username" class="form-control has-feedback-left" placeholder="Username" autofocus />
+                                <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>*@
+
+                            </div>
+
+                        </div>
+                        <div>
+                            @*@if(!string.IsNullOrEmpty(ViewBag.msg))
+                            {
+                            <label class="success">@ViewBag.msg</label> 
+                            }*@
+                            
+                            <button class="btn  btn-default" name="button"  type="button" id="submitlogin">发    送</button>
+                           
+
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="separator">
+                            <div class="clearfix"></div>
+                            <br />
+
+                            <div class="copyrightText">
+
+                                <p>
+                                    Copyright(C)2017 <a href="https://www.aytiantian0502.com">aytiantian0502.com</a> All Rights Reserved<br />
+                                    天天易拉罐 版权所有 豫ICP备17024774号-1
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#submitlogin").click(function () {
+                var username = $("#Username").val();
+                if (username.trim().replace(/(^s*)|(s*$)/g, "").length == 0) {
+                    notice("错误！", "error", "邮箱地址不能为空！");
+                    $("#Username").focus();
+                }
+                settime();
+                var senddata = $("#form_login").serialize();
+                console.log(username);
+                $.post("/Account/SendConfirmEmailByPost", senddata, function (data) {
+                    $("#errormsg").html(data.errorMessage);
+                })
+
+            });
+
+
+            if (!$("#errormsg").val() == "") { 
+                notice("错误！", "error", $("#errormsg").val());
+                //console.log($("#errormsg").val());
+            }
+            
+        });
+
+        var countdown = 60;
+        function settime() {
+            if (countdown == 0) {
+                $("#submitlogin").attr("disabled", false);
+                $("#submitlogin").html("发    送");
+                //$("#submitlogin").attr("value", "发    送");
+                countdown =60;
+            } else {
+                $("#submitlogin").attr("disabled", true);
+                $("#submitlogin").html("重新发送(" + countdown + ")");
+                //$("#submitlogin").attr("value", "重新发送(" + countdown + ")");
+                countdown--;
+                setTimeout(settime, 1000)
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+

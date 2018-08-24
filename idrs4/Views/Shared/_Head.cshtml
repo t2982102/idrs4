@@ -3,103 +3,420 @@
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+    
+
+}
+
+<div class="top_nav">
+    <div class="nav_menu">
+        <nav>
+            <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+            </div>
 
 
-    <div class="top_nav">
-        <div class="nav_menu">
-            <nav>
-                <div class="nav toggle">
-                    <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-                </div>
 
-
-             
-                <ul class="nav navbar-nav navbar-right">
-                    @if (SignInManager.IsSignedIn(User))
-                    {
-                        <li class="">
-                            <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                <img src="images/img.jpg" alt="">@UserManager.GetUserName(User)
-                                <span class=" fa fa-angle-down"></span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                <li><a href="javascript:;"> Profile</a></li>
-                                <li>
-                                    <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">
-                                        @*<span class="badge bg-red pull-right">50%</span>*@
-                                        <span>Settings</span>
-                                    </a>
-                                </li>
-                                <li><a href="javascript:;">Help</a></li>
-                                <li> <a asp-action="Logout" asp-controller="Account"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
-                            </ul>
-                        </li>
-                    }
-                    <li role="presentation" class="dropdown">
-                        <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                            <i class="fa fa-envelope-o"></i>
-                            <span class="badge bg-green">6</span>
+            <ul class="nav navbar-nav navbar-right">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <li class="">
+                        <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <img src="~/images/img.jpg" alt="">@user.UserName
+                            <span class=" fa fa-angle-down"></span>
                         </a>
-                        <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                        <ul class="dropdown-menu dropdown-usermenu pull-right">
+                            <li><a href="#" data-toggle="modal" data-target="#myinfoModal"> <i class="fa fa-user pull-right"></i>我的信息</a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#ChangePasswordModal"> <i class="fa fa-unlock-alt pull-right"></i>修改密码</a></li>
                             <li>
-                                <a>
-                                    <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                                    <span>
-                                        <span>John Smith</span>
-                                        <span class="time">3 mins ago</span>
-                                    </span>
-                                    <span class="message">
-                                        Film festivals used to be do-or-die moments for movie makers. They were where...
-                                    </span>
+                                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">
+                                    @*<span class="badge bg-red pull-right">50%</span>*@
+                                    <span>Settings</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
-                                    <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                                    <span>
-                                        <span>John Smith</span>
-                                        <span class="time">3 mins ago</span>
-                                    </span>
-                                    <span class="message">
-                                        Film festivals used to be do-or-die moments for movie makers. They were where...
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a>
-                                    <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                                    <span>
-                                        <span>John Smith</span>
-                                        <span class="time">3 mins ago</span>
-                                    </span>
-                                    <span class="message">
-                                        Film festivals used to be do-or-die moments for movie makers. They were where...
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a>
-                                    <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                                    <span>
-                                        <span>John Smith</span>
-                                        <span class="time">3 mins ago</span>
-                                    </span>
-                                    <span class="message">
-                                        Film festivals used to be do-or-die moments for movie makers. They were where...
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <div class="text-center">
-                                    <a>
-                                        <strong>See All Alerts</strong>
-                                        <i class="fa fa-angle-right"></i>
-                                    </a>
-                                </div>
-                            </li>
+                            <li><a href="javascript:;">Help</a></li>
+                            <li> <a asp-action="Logout" asp-controller="Account"><i class="fa fa-sign-out pull-right"></i> 退   出</a></li>
                         </ul>
                     </li>
-                </ul>
-                </nav>
+                }
+                <li role="presentation" class="dropdown">
+                    <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-envelope-o"></i>
+                        <span class="badge bg-green">6</span>
+                    </a>
+                    <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                        <li>
+                            <a>
+                                <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
+                                <span>
+                                    <span>John Smith</span>
+                                    <span class="time">3 mins ago</span>
+                                </span>
+                                <span class="message">
+                                    Film festivals used to be do-or-die moments for movie makers. They were where...
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
+                                <span>
+                                    <span>John Smith</span>
+                                    <span class="time">3 mins ago</span>
+                                </span>
+                                <span class="message">
+                                    Film festivals used to be do-or-die moments for movie makers. They were where...
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
+                                <span>
+                                    <span>John Smith</span>
+                                    <span class="time">3 mins ago</span>
+                                </span>
+                                <span class="message">
+                                    Film festivals used to be do-or-die moments for movie makers. They were where...
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
+                                <span>
+                                    <span>John Smith</span>
+                                    <span class="time">3 mins ago</span>
+                                </span>
+                                <span class="message">
+                                    Film festivals used to be do-or-die moments for movie makers. They were where...
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <div class="text-center">
+                                <a>
+                                    <strong>See All Alerts</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+<div class="modal fade" id="myinfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">用户信息</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form-horizontal" method="post">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">Email</label>
+                        <div class="col-lg-10">
+                            <input type="text" placeholder="请输入Email作为用户名" id="EmailHead" datatype="e" name="Email" class="form-control" nullmsg="请输入Email作为用户名！" errormsg="请填写正确的Email地址" value="@user.UserName" readonly>
+                            @*<p class="help-block">Example block-level help text here.</p>*@
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">手机号码</label>
+                        <div class="col-lg-5">
+                            <input type="text" placeholder="请输入手机号码" id="PhoneNumberHead" datatype="m" name="PhoneNumber" class="form-control" nullmsg="请输入手机号码" errormsg="请填写正确的手机号码" value="@user.PhoneNumber">
+                            @*<p class="help-block">Example block-level help text here.</p>*@
+                        </div>
+                        <div class="col-lg-5" id="sendVerify">
+                            <button class="btn btn-success" type="button" id="SendCode">发送验证码</button>
+                            @*<p class="help-block">Example block-level help text here.</p>*@
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="VerifyPhoneNumber">
+                        <label class="col-lg-2 col-sm-2 control-label">验证码</label>
+                        <div class="col-lg-3">
+                            <input type="text" placeholder="请输入验证码" id="PhoneCodeHead" name="PhoneCode" class="form-control" nullmsg="请输入验证码">
+                            @*<p class="help-block">Example block-level help text here.</p>*@
+                        </div>
+                        <div class="col-lg-3">
+                            <button class="btn btn-success" type="button" id="VerifyCode">验证</button>
+                            @*<p class="help-block">Example block-level help text here.</p>*@
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">邮箱验证</label>
+                        <div class="col-lg-10">
+                            <input type="hidden" id="EmailConfirmed" value="@user.EmailConfirmed" />
+                            @if (user.EmailConfirmed)
+                            {
+                                <span class="btn btn-sm  btn-success email">已验证</span>
+                            }
+                            else
+                            {
+                                <span class="btn btn-sm btn-danger email">未验证</span>
+                            }
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">手机验证</label>
+                        <div class="col-lg-10">
+                            <input type="hidden" id="PhoneConfirmed" value="@user.PhoneNumberConfirmed" />
+                            @if (user.PhoneNumberConfirmed)
+                            {
+                                <span class="btn btn-sm btn-success">已验证</span>
+                            }
+                            else
+                            {
+                                <span class="btn btn-sm btn-danger" id="phoneok">未验证</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+
+            </div>
+
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="ChangePasswordModal" tabindex="-1" role="dialog" aria-labelledby="ChangePasswordModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">修改密码</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form-horizontal" method="post" id="changepasswordform">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">原始密码</label>
+                        <div class="col-lg-10">
+                            <input type="password" placeholder="原始密码" id="OldPassword" datatype="*6-16" name="OldPassword" class="form-control" nullmsg="请输入原始密码！" errormsg="密码范围在6~16位之间！">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">新的密码</label>
+                        <div class="col-lg-10">
+                            <input type="password" placeholder="密码" id="NewPassword" datatype="*6-16" name="NewPassword" class="form-control" nullmsg="请设置新的密码！" errormsg="密码范围在6~16位之间！">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">密码确认</label>
+                        <div class="col-lg-10">
+                            <input type="password" placeholder="请再次输入密码" id="ConfirmPassword" recheck="NewPassword" datatype="*6-16" name="ConfirmPassword" class="form-control" nullmsg="请再输入一次密码！" errormsg="您两次输入的账号密码不一致！">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger" type="submit" id="changerpasswordbtn">修改</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="~/js/Validform_v5.3.2_min.js" type="text/javascript"></script>
+<script>
+    var PhoneConfirmed = $("#PhoneConfirmed").val();
+    var EmailConfirmed = $("#EmailConfirmed").val();
+
+    // 验证手机号
+    function isPhoneNo(phone) {
+        //if(phone.length<0)
+        //{
+        //    return false;
+        //}
+        var pattern = /^1[34578]\d{9}$/;
+        return pattern.test(phone);
+    }
+    if (PhoneConfirmed) {
+        $("#PhoneNumberHead").attr("readonly", "readonly");
+        $("#sendVerify").hide();
+        $("#VerifyPhoneNumber").hide();
+    }
+    else {
+        $("#VerifyPhoneNumber").hide();
+    }
+    $("#SendCode").click(function () {
+        var phonenumber = $("#PhoneNumberHead").val();
+        //console.log(isPhoneNo(phonenumber))
+        if (isPhoneNo(phonenumber)) {
+            settime();
+            $.post("/UserManage/SendSMS", { PhoneNumber: phonenumber }, function (data) {
+                //console.log(data);
+                if (data.errorCode >= 0) {
+
+                    //$("#SendCode").hide();
+                    $("#VerifyPhoneNumber").show();
+                    $("#PhoneNumberHead").attr("readonly", "readonly");
+                }
+                else {
+                    notice("错误", "error", "警告：<h3>" + data.errorMessage + "</h3>");
+                    //notie.alert(3, "警告：<h3>" + data.errorMessage + "</h3>", 4);
+                }
+            })
+        }
+        else {
+            notice("错误", "error", "警告：<h3>请输入正确的手机号</h3>");
+            //notie.alert(3, "警告：<h3>请输入正确的手机号</h3>", 4);
+        }
+    });
+    var countdown = 60;
+    function settime() {
+        if (countdown == 0) {
+            $("#SendCode").attr("disabled", false);
+            $("#SendCode").html("发    送");
+            //$("#submitlogin").attr("value", "发    送");
+            countdown = 60;
+        } else {
+            $("#SendCode").attr("disabled", true);
+            $("#SendCode").html("重新发送(" + countdown + ")");
+            //$("#submitlogin").attr("value", "重新发送(" + countdown + ")");
+            countdown--;
+            setTimeout(settime, 1000)
+        }
+    }
+    $("#VerifyCode").click(function () {
+        var PhoneCodeHead = $("#PhoneCodeHead").val();
+        var PhoneNumber = $("#PhoneNumberHead").val();
+        if (PhoneCodeHead.replace(/(^s*)|(s*$)/g, "").length == 0) {
+            notice("错误", "error", "<h3>请输入验证码</h3>");
+            //noti(3, "警告：<h3>请输入验证码</h3>", 4);
+        }
+        else {
+            var Code = $("#PhoneCodeHead").val();
+            $.post("/UserManage/VerifyPhoneNumber", { PhoneNumber: PhoneNumber, Code: Code }, function (data) {
+                if (data.errorCode > 0) {
+                    $("#sendVerify").hide();
+                    $("#VerifyPhoneNumber").hide();
+                    $("#phoneok").html("已验证");
+                    $("#phoneok").addClass("btn-success").removeClass("btn-danger");
+                }
+                else {
+                    notice("错误", "error", "警告：<h3>" + data.errorMessage + "</h3>");
+                    //notie.alert(3, "警告：<h3>" + data.errorMessage + "</h3>", 4);
+                }
+            })
+        }
+
+    })
+    $('#ChangePasswordModal').on('hidden.bs.modal', function () {
+        //alert("aaaa");
+        //$(this).removeData('bs.modal');
+        $('#changepasswordform')[0].reset();
+    });
+    
+    $("#changepasswordform").Validform({
+        tiptype: 4,
+        url:"/UserManage/ChangePassword",
+        ajaxPost: true,
+        callback: function (data) {
+            //console.log(data);
+            if (data.errorCode > 0) {
+                notice("成功！", "success", "修改成功！");
+                
+                $("#ChangePasswordModal").modal('hide');
+                //window.location.reload();
+            }
+            else {
+                console.log(data);
+                notice("错误！", "error", data.errorMessage);
+                //notie.alert(3, "警告：<h3>" + data.errorMessage + "</h3>", 4);
+            }
+        }
+    });
+
+
+
+
+
+
+    //$.get("/Default/GetImage?type=headimg", function (data) {
+    //    $("#headimg").attr("src", data);
+    //})
+
+    //做个下简易的验证  大小 格式
+    $('#avatarInput').on('change', function (e) {
+        var filemaxsize = 1024 * 5;//5M
+        var target = $(e.target);
+        var Size = target[0].files[0].size / 1024;
+        if (Size > filemaxsize) {
+            alert('图片过大，请重新选择!');
+            $(".avatar-wrapper").childre().remove;
+            return false;
+        }
+        if (!this.files[0].type.match(/image.*/)) {
+            alert('请选择正确的图片!')
+        } else {
+            var filename = document.querySelector("#avatar-name");
+            var texts = document.querySelector("#avatarInput").value;
+            var teststr = texts; //你这里的路径写错了
+            testend = teststr.match(/[^\\]+\.[^\(]+/i); //直接完整文件名的
+            filename.innerHTML = testend;
+        }
+
+    });
+
+    $(".avatar-save").on("click", function () {
+
+        var img_lg = document.getElementById('imageHead');
+        var filetext = document.querySelector("#avatarInput").value;
+        if (filetext.length <= 0) {
+            alert("请选择您要上传的头像");
+            return false;
+        }
+        //console.log(img_lg);
+        // 截图小的显示框内的内容
+        html2canvas(img_lg, {
+            allowTaint: true,
+            taintTest: false,
+            onrendered: function (canvas) {
+                canvas.id = "mycanvas";
+                //生成base64图片数据
+                var dataUrl = canvas.toDataURL("image/jpeg");
+                var newImg = document.createElement("img");
+                newImg.src = dataUrl;
+                imagesAjax(dataUrl)
+            }
+        });
+    })
+
+    function imagesAjax(src) {
+
+        var data = {};
+        data.img = src;
+        //data.jid = $('#jid').val();
+        //console.log(data);
+        $.ajax({
+            url: "/Default/UploadHeadImage",
+            data: data,
+            type: "POST",
+            dataType: 'json',
+            success: function (data) {
+                if (data.errorCode > 0) {
+                    $("#headimg").attr('src', src);
+                }
+                else {
+                    notie.alert(3, "警告：<h3>" + data.errorMessage + "</h3>", 4);
+                }
+            }
+        });
+    }
+
+
+</script>

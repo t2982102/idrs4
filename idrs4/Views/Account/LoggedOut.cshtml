@@ -3,32 +3,171 @@
 @{
     // set this so the layout rendering sees an anonymous user
     ViewData["signed-out"] = true;
+    Layout = null;
 }
 
-<div class="page-header logged-out">
-    <h1>
-        Logout
-        <small>You are now logged out</small>
-    </h1>
 
-    @if (Model.PostLogoutRedirectUri != null)
-    {
-        <div>
-            Click <a class="PostLogoutRedirectUri" href="@Model.PostLogoutRedirectUri">here</a> to return to the
-            <span>@Model.ClientName</span> application.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;text/javascript; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    @*<meta name="viewport" content="width=device-width, initial-scale=1">*@
+
+
+    <title>天天后台管理系统</title>
+
+    <!-- Bootstrap -->
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="~/lib/nprogress/nprogress.css" rel="stylesheet">
+
+    <!-- Animate.css -->
+    <link href="~/lib/animate.css/animate.min.css" rel="stylesheet">
+    <link href="~/lib/pnotify/dist/pnotify.css" rel="stylesheet">
+    <link href="~/lib/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+    <link href="~/lib/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="~/css/custom.css" rel="stylesheet">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <style>
+        .font16 {
+            font-size:16px;
+        }
+        .fontcolor {
+            color:#ff0000;
+        }
+    </style>
+
+</head>
+
+<body class="login2">
+
+    <div class="container">
+        <div class="row row-centered">
+            <div class="well col-md-4 col-centered opacitybackground copyrightText">
+                <section class="login_content">
+                    <form asp-route="Login" id="form_login" class=" form-label-left input_mask">
+
+                        <h1>退    出</h1>
+                        <div class="row copyrightText">
+                            @if (Model.PostLogoutRedirectUri != null)
+                            {
+                                <label class="font16">你已经退出，<a class="PostLogoutRedirectUri " style="font-size:16px;" href="@Model.PostLogoutRedirectUri">点击此处</a>返回首页或者<span id="djs" class="fontcolor">3</span>秒回自动跳转</label>
+                            }
+                            else
+                            {
+                                <label class="font16">你已经退出，<a style="font-size:16px;" href="/">点击此处</a>返回首页或者<span id="djs" class="fontcolor">3</span>秒回自动跳转</label>
+                            }
+                            @if (Model.SignOutIframeUrl != null)
+                            {
+                                <iframe width="0" height="0" class="signout" src="@Model.SignOutIframeUrl"></iframe>
+                            }
+
+
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="separator">
+
+                            <div class="clearfix"></div>
+                            <br />
+
+                            <div class="copyrightText">
+
+                                <p>
+                                    Copyright(C)2017 <a href="https://www.aytiantian0502.com">aytiantian0502.com</a> All Rights Reserved<br />
+                                    天天易拉罐 版权所有 豫ICP备17024774号-1
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+
         </div>
-    }
+    </div>
 
-    @if (Model.SignOutIframeUrl != null)
-    {
-        <iframe width="0" height="0" class="signout" src="@Model.SignOutIframeUrl"></iframe>
+    @section scripts
+        {
+        @if (Model.AutomaticRedirectAfterSignOut)
+        {
+            <script src="~/js/signout-redirect.js"></script>
+        }
     }
-</div>
+ <script type="text/javascript">
+     $(document).ready(function () {
 
-@section scripts
-    {
-    @if (Model.AutomaticRedirectAfterSignOut)
-    {
-        <script src="~/js/signout-redirect.js"></script>
-    }
-}
+         settime();
+     })
+        var djs = 5;
+        $("#djs").html(" "+djs+" ");
+        var countdown = djs;
+        function settime() {
+              if (countdown == 0) {
+                    var a = document.querySelector("a.PostLogoutRedirectUri");
+                  if (a) {
+                      window.location = a.href;
+                  }
+                  else {
+                      
+                      window.location = "/";
+                  }
+                countdown = djs;
+              }
+              else
+              {
+                $("#djs").html(countdown);
+                countdown--;
+                setTimeout(settime, 1000)
+              }
+        }
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+@*<div class="page-header logged-out">
+        <h1>
+            Logout
+            <small>You are now logged out</small>
+        </h1>
+
+        @if (Model.PostLogoutRedirectUri != null)
+        {
+            <div>
+                Click <a class="PostLogoutRedirectUri" href="@Model.PostLogoutRedirectUri">here</a> to return to the
+                <span>@Model.ClientName</span> application.
+            </div>
+        }
+
+        @if (Model.SignOutIframeUrl != null)
+        {
+            <iframe width="0" height="0" class="signout" src="@Model.SignOutIframeUrl"></iframe>
+        }
+    </div>
+
+    @section scripts
+        {
+        @if (Model.AutomaticRedirectAfterSignOut)
+        {
+            <script src="~/js/signout-redirect.js"></script>
+        }
+    }*@

@@ -67,7 +67,7 @@ namespace idrs4
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
-
+            services.AddTransient<ISMSSender, SMSSender>();
             services.AddMvc();
             //services.AddMvc(options => {
             //    options.Filters.Add<MyAuthorizationFilter>();

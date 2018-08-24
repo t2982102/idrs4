@@ -1,0 +1,197 @@
+﻿<style>
+    .qmbox .clearfix:after {
+        content: ".";
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+    }
+
+    .qmbox .clearfix {
+        *display: inline-block;
+        *zoom: 100%;
+    }
+
+    .qmbox .open_email {
+        background: url(http://imgcache.qq.com/bossweb/pay/images/mailmsg/email_bg.png) no-repeat 0 -35px;
+        width: 760px;
+        padding: 10px;
+        font-family: Tahoma,"宋体";
+        margin: 0 auto;
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+        .qmbox .open_email a:link, .qmbox .open_email a:visited {
+            color: #295394;
+            text-decoration: none !important;
+        }
+
+        .qmbox .open_email a:active, .qmbox .open_email a:hover {
+            color: #000;
+            text-decoration: underline !important;
+        }
+
+    .qmbox a.lv:link, .qmbox a.lv:visited {
+        color: #1969e2;
+        text-decoration: underline;
+    }
+
+    .qmbox a.lv:active, .qmbox a.lv:hover {
+        color: #000;
+        text-decoration: underline;
+    }
+
+    .qmbox .open_email .img_left {
+        float: left;
+        width: 125px;
+        text-align: left;
+    }
+
+    .qmbox .open_email .word_right {
+        float: right;
+        width: 615px;
+    }
+
+    .qmbox .open_email h5, .qmbox .open_email h6 {
+        font-size: 14px;
+        margin: 0px;
+        padding-top: 2px;
+        line-height: 21px;
+    }
+
+    .qmbox .open_email h5 {
+        color: #df0202;
+        padding-bottom: 10px;
+    }
+
+    .qmbox .open_email h6 {
+        padding-bottom: 2px;
+    }
+
+    .qmbox .open_email h5 span, .qmbox .open_email p {
+        font-size: 12px;
+        color: #808080;
+        font-weight: normal;
+        margin: 0;
+        padding: 0;
+        line-height: 21px;
+    }
+
+    .qmbox .email_btn {
+        background: url(http://imgcache.qq.com/bossweb/pay/images/mailmsg/email_bg.png) no-repeat 0 0;
+        width: 84px;
+        height: 29px;
+        line-height: 29px;
+        border: 0;
+        padding: 0px;
+        cursor: pointer;
+        color: #023a65;
+        font-size: 14px;
+        vertical-align: middle;
+        text-align: center;
+        margin: 10px 0 6px;
+        display: block;
+        text-decoration: none;
+    }
+
+    .qmbox .email_hr {
+        background: url(http://imgcache.qq.com/bossweb/pay/images/mailmsg/email_bg.png) no-repeat -100px 0px;
+        height: 4px;
+        margin: 8px 0;
+        >overflow:hidden;
+    }
+</style>
+<style type="text/css">
+    .qmbox .box {
+        font-size: 13px;
+        width: 100%;
+        margin: 0 auto;
+        border: 1px solid #DDDDDD;
+    }
+
+    .qmbox .header {
+        height: 72px;
+        background: #f4f4f4;
+    }
+
+        .qmbox .header img {
+            margin: 18px 0 16px 14px;
+        }
+
+    .qmbox .doc-div {
+        padding: 17px 30px;
+        font-family: "微软雅黑";
+    }
+
+        .qmbox .doc-div p {
+            margin: 7px 0;
+        }
+
+            .qmbox .doc-div p a {
+                width: 772px;
+                display: inline-block;
+                word-wrap: break-word;
+                color: blue;
+            }
+
+                .qmbox .doc-div p a:link {
+                    color: blue;
+                }
+
+                .qmbox .doc-div p a:hover {
+                    color: #842f8b;
+                }
+
+    .qmbox .weight {
+        font-weight: bolder;
+    }
+</style><div align="center">
+    <div class="open_email" style="margin-left: 8px; margin-top: 8px; margin-bottom: 8px; margin-right: 8px;">
+        <div>
+            <span class="genEmailNicker">
+
+            </span>
+            <br>
+            <span class="genEmailContent">
+
+
+                <div class="box">
+                    <div class="header">
+                        <!--<img src="http://www.aytiantian0502.com/Content/assets/img/mylogo.jpg" width="180px">-->
+                        <img src="https://s1.ax1x.com/2018/03/03/9s5lUH.jpg" width="180px">
+                        
+                    </div>
+                    <div class="content">
+                        <div class="doc-div weight">{2}，您好：</div>
+                        <div class="doc-div">
+                            <p>请点击以下链接，完成邮箱绑定：</p>
+                            <p><a class="href" href="{0}" target="_blank">{0}</a></p>
+                        </div>
+                        <div class="doc-div">
+                            <p>· 如果您无法点击此链接，请复制链接地址，并且粘贴到浏览器中进行访问，完成绑定</p>
+                            <p>· 如果验证失败，请重新登录系统操作获取本邮件</p>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <div class="doc-div">
+                            <p style="padding-left: 40px;">此致</p>
+                            <p>敬礼!</p>
+                            <p style="text-align: right;margin-top: 20px;">天天易拉罐</p>
+                            <p style="text-align: right"><span style="border-bottom:1px dashed #ccc;" t="5" times="">{1}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </span>
+            <br>
+            <span class="genEmailTail">
+
+            </span>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    .qmbox style, .qmbox script, .qmbox head, .qmbox link, .qmbox meta {
+        display: none !important;
+    }
+</style>

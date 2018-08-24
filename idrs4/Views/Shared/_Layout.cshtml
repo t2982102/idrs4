@@ -10,53 +10,12 @@
 
     <title>Gentelella Alela! | </title>
 
-    <!-- Bootstrap -->
-    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <!-- NProgress -->
-    <link href="~/lib/nprogress/nprogress.css" rel="stylesheet">
-    <!-- iCheck -->
-    <link href="~/lib/iCheck/skins/flat/green.css" rel="stylesheet">
-
-    <!-- bootstrap-progressbar -->
-    <link href="~/lib/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
-    <!-- JQVMap -->
-    <link href="~/lib/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
-    <!-- bootstrap-daterangepicker -->
-    <link href="~/lib/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-
-    <!-- Custom Theme Style -->
-    <link href="~/css/custom.min.css" rel="stylesheet">
-</head>
-
-<body class="nav-md">
-    <div class="container body">
-        <div class="main_container">
-            <!-- 左边menu -->
-            @Html.Partial("~/Views/Shared/_Menu.cshtml")
-            <!-- /左边menu -->
-            <!-- 头部开始 -->
-            @Html.Partial("~/Views/Shared/_Head.cshtml")
-            <!-- /头部结束 -->
-            <!-- page content -->
-            <div class="right_col" role="main">
-                <div class="">
-                    @RenderBody()
-                </div>
-
-            </div>
-            <!-- /page content -->
-            <!-- footer content -->
-            @Html.Partial("~/Views/Shared/_Footer.cshtml")
-            <!-- /footer content -->
-        </div>
-    </div>
 
     <!-- jQuery -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
     <!-- FastClick -->
     <script src="~/lib/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
@@ -90,9 +49,74 @@
     <!-- bootstrap-daterangepicker -->
     <script src="~/lib/moment/min/moment.min.js"></script>
     <script src="~/lib/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script src="~/lib/bootstrap-table-1.11.0/dist/bootstrap-table.js"></script>
+    <script src="~/lib/bootstrap-table-1.11.0/dist/extensions/export/bootstrap-table-export.js"></script>
+    <script src="~/lib/bootstrap-table-1.11.0/dist/tableExport.js"></script>
+    <script src="~/lib/bootstrap-table-1.11.0/dist/locale/bootstrap-table-zh-CN.js"></script>
+    <script src="~/lib/pnotify/dist/pnotify.js"></script>
+    <script src="~/lib/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="~/lib/pnotify/dist/pnotify.nonblock.js"></script>
+
+    <script src="~/js/app.js"></script>
+    <!-- Bootstrap -->
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    @*<link href="~/lib/bootstrap-select/dist/css/bootstrap-select.css" rel="stylesheet" />*@
+    <!-- Font Awesome -->
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="~/lib/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="~/lib/iCheck/skins/flat/green.css" rel="stylesheet">
+
+    <!-- bootstrap-progressbar -->
+    <link href="~/lib/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="~/lib/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
+    <!-- bootstrap-daterangepicker -->
+    <link href="~/lib/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="~/css/custom.min.css" rel="stylesheet">
+
+    <link href="~/lib/bootstrap-table-1.11.0/dist/bootstrap-table.css" rel="stylesheet" />
+
+    <link href="~/lib/pnotify/dist/pnotify.css" rel="stylesheet">
+    <link href="~/lib/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+    <link href="~/lib/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+
+</head>
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            <!-- 左边menu -->
+            @Html.Partial("~/Views/Shared/_Menu.cshtml")
+            <!-- /左边menu -->
+            <!-- 头部开始 -->
+            @Html.Partial("~/Views/Shared/_Head.cshtml")
+            <!-- /头部结束 -->
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+                    @RenderBody()
+                </div>
+
+            </div>
+            <!-- /page content -->
+            <!-- footer content -->
+            @Html.Partial("~/Views/Shared/_Footer.cshtml")
+            <!-- /footer content -->
+        </div>
+    </div>
+
+
+
+    
+
+
 
     <!-- Custom Theme Scripts -->
-    <script src="~/js/custom.min.js"></script>
+    <script src="~/js/custom.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

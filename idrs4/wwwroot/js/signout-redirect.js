@@ -3,4 +3,7 @@
     if (a) {
         window.location = a.href;
     }
+    else {
+        window.location = "/";
+    }
 });

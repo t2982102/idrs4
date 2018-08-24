@@ -29,19 +29,32 @@ namespace idrs4.Filter
             {
                 return;
             }
+
+            
+
             if (context.HttpContext.User.Identity.IsAuthenticated)
             {
+
+
+                //context.HttpContext.User.
                 var claims = context.HttpContext.User.Claims;
-                
-               var permissions = claims.Where(c => c.Type.Equals("permission")&c.Value.Equals(permission));
-                if (permissions.Count() > 0)
+                if (claims.Where(c => c.Type.Equals("email_verified") & c.Value.Equals("false")).Count() > 0)
                 {
-                    return;
+                    context.Result = new RedirectResult("/Account/SendConfirmEmail?Email=" + claims.Where(c => c.Type.Equals("email")).FirstOrDefault().Value);
                 }
                 else
                 {
-                    context.Result = new ForbidResult();
+                    var permissions = claims.Where(c => c.Type.Equals("permission") & c.Value.Equals(permission));
+                    if (permissions.Count() > 0)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        context.Result = new ForbidResult();
+                    }
                 }
+         
             }
             else
             {

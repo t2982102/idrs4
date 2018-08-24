@@ -8,15 +8,16 @@ namespace idrs4.Models.AccountViewModels
 {
     public class RegisterRoleViewModel
     {
-        [Required]
+        [Required(ErrorMessage ="角色名称不能为空！")]
         [Display(Name = "角色名称")]
-        public string Name { get; set; }
+        public string RoleName { get; set; }
 
-        [Required]
-        [Display(Name = "角色标识")]
-        public string NormalizedName { get; set; }
+        [Required(ErrorMessage = "角色描述不能为空！")]
+        [Display(Name = "角色描述")]
+        public string Description { get; set; }
 
-        [Required]
+
+        [Required(ErrorMessage = "客户端标识不能为空！")]
         [Display(Name ="客户端标识")]
         public string ClientName { get; set; }
     }

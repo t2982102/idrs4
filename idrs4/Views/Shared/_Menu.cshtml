@@ -1,7 +1,15 @@
-﻿<div class="col-md-3 left_col">
+﻿@using Microsoft.AspNetCore.Identity
+@using idrs4.Models
+@inject UserManager<ApplicationUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+
+
+}
+<div class="col-md-3 left_col">
     <div class="left_col scroll-view">
         <div class="navbar nav_title" style="border: 0;">
-            <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Gentelella Alela!</span></a>
+            <a href="index.html" class="site_title"> <span>天天易拉罐后台管理</span></a>
         </div>
 
         <div class="clearfix"></div>
@@ -9,11 +17,11 @@
         <!-- menu profile quick info -->
         <div class="profile clearfix">
             <div class="profile_pic">
-                <img src="images/img.jpg" alt="..." class="img-circle profile_img">
+                <img src="~/images/img.jpg" alt="..." class="img-circle profile_img">
             </div>
             <div class="profile_info">
-                <span>Welcome,</span>
-                <h2>John Doe</h2>
+                <span>欢迎</span>
+                <h2>@user.UserName</h2>
             </div>
         </div>
         <!-- /menu profile quick info -->
@@ -23,17 +31,17 @@
         <!-- sidebar menu -->
         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
             <div class="menu_section">
-                <h3>General</h3>
+                <h3>菜   单</h3>
                 <ul class="nav side-menu">
                     <li>
-                        <a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                        <a><i class="fa fa-home"></i> 用户管理 <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="index.html">Dashboard</a></li>
-                            <li><a href="index2.html">Dashboard2</a></li>
-                            <li><a href="index3.html">Dashboard3</a></li>
+                            <li><a href="~/UserManage/Index">账户管理</a></li>
+                            <li><a href="~/RoleManage/Index">角色管理</a></li>
+                            <li><a href="~/PermissionManage/Index">权限管理</a></li>
                         </ul>
                     </li>
-                    <li>
+                    @*<li>
                         <a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="form.html">General Form</a></li>
@@ -81,10 +89,10 @@
                             <li><a href="fixed_sidebar.html">Fixed Sidebar</a></li>
                             <li><a href="fixed_footer.html">Fixed Footer</a></li>
                         </ul>
-                    </li>
+                    </li>*@
                 </ul>
             </div>
-            <div class="menu_section">
+            @*<div class="menu_section">
                 <h3>Live On</h3>
                 <ul class="nav side-menu">
                     <li>
@@ -133,25 +141,68 @@
                     </li>
                     <li><a href="javascript:void(0)"><i class="fa fa-laptop"></i> Landing Page <span class="label label-success pull-right">Coming Soon</span></a></li>
                 </ul>
-            </div>
+            </div>*@
 
         </div>
         <!-- /sidebar menu -->
         <!-- /menu footer buttons -->
         <div class="sidebar-footer hidden-small">
-            <a data-toggle="tooltip" data-placement="top" title="Settings">
+            <a  data-toggle="modal" data-target="#myinfoModal" data-placement="top" title="我的信息">
                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
             </a>
-            <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+            <a id="FullScreen" data-toggle="tooltip" class="fullscreen" data-placement="top" title="FullScreen" >
                 <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
             </a>
-            <a data-toggle="tooltip" data-placement="top" title="Lock">
+            <a href="javascript:void(0);" onclick="window.location.href='/Account/Lockout?ReturnUrl='+encodeURIComponent(window.location.href)"  data-toggle="tooltip" data-placement="top" title="Lock">
                 <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
             </a>
-            <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+            <a href="/Account/Logout" data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
                 <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
             </a>
         </div>
         <!-- /menu footer buttons -->
     </div>
 </div>
+<script>
+    var clickcs = 0;
+    $("#FullScreen").click(function () {
+        if (clickcs == 0) {
+            var docElm = document.documentElement;
+            //W3C 
+            if (docElm.requestFullscreen) {
+                docElm.requestFullscreen();
+            }
+            //FireFox 
+            else if (docElm.mozRequestFullScreen) {
+                docElm.mozRequestFullScreen();
+            }
+            //Chrome等 
+            else if (docElm.webkitRequestFullScreen) {
+                docElm.webkitRequestFullScreen();
+            }
+            //IE11 
+            else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+            clickcs = 1;
+        }
+        else 
+        { 
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+            else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            }
+            else if (document.webkitCancelFullScreen) {
+                document.webkitCancelFullScreen();
+            }
+            else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+            clickcs = 0;
+        }
+        
+    })
+
+</script>

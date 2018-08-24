@@ -30,6 +30,8 @@ namespace idrs4.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
+                    b.Property<string>("Description");
+
                     b.Property<string>("Name")
                         .HasMaxLength(256);
 
