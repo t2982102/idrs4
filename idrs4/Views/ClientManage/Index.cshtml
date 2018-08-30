@@ -2,7 +2,7 @@
 
 <div class="page-title">
     <div class="title_left">
-        <h3>用户管理 </h3>
+        <h3>Client管理 </h3>
     </div>
 
     <div class="title_right">
@@ -20,7 +20,7 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
-                <h2>用户列表 <small>Users</small></h2>
+                <h2>Client列表 <small>Users</small></h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li>
                         <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -34,19 +34,19 @@
             <div class="x_content">
 
                 <div id="toolbar-btn" class=" pull-left" style="padding-bottom:10px;">
-                    @if (ExPrincipal.IsPermission(User, "UserManage.Add"))
+                    @if (ExPrincipal.IsPermission(User, "ClientManage.Add"))
                     {
-                        <button type="button" class="btn btn-primary " style="float:left;" data-toggle="modal" data-target="#addUserModal"><i class="fa fa-plus"></i>新增</button>
+                    <button type="button" class="btn btn-primary " style="float:left;" data-toggle="modal" data-target="#addUserModal"><i class="fa fa-plus"></i>新增</button>
                     }
-                    @if (ExPrincipal.IsPermission(User, "UserManage.Give"))
+                    @if (ExPrincipal.IsPermission(User, "ClientManage.Up"))
                     {
-                        <button class="btn btn-success " style="float:left;" data-toggle="modal" data-target="#UserToRoleModal"><i class="fa fa-group"></i>角色授权</button>
+                    <button class="btn btn-success " style="float:left;" data-toggle="modal" data-target="#UserToRoleModal"><i class="fa fa-group"></i>修改</button>
                     }
-                    @if (ExPrincipal.IsPermission(User, "UserManage.Del"))
+                    @if (ExPrincipal.IsPermission(User, "ClientManage.Del"))
                     {
-                        <button type="button" class="btn btn-danger " style="float:left;" onclick="remove()"><i class="fa fa-trash-o"></i>删除</button>
+                    <button type="button" class="btn btn-danger " style="float:left;" onclick="remove()"><i class="fa fa-trash-o"></i>删除</button>
                     }
-                    <input class="form-control" placeholder="用户名..." type="text" style="float:left;width:150px;margin-right:5px;" name="searchpermissiontxt" id="searchpermissiontxt">
+                    <input class="form-control" placeholder="ClientID..." type="text" style="float:left;width:150px;margin-right:5px;" name="searchpermissiontxt" id="searchpermissiontxt">
                     <button id="searchpermissionbtn" type="button" class="btn btn-primary ">
                         <i class="fa fa-search">搜索</i>
                     </button>
@@ -63,12 +63,27 @@
                     <thead>
                         <tr>
                             <th data-field="state" data-checkbox="true"></th>
-                            <th data-field="id" data-sortable="true" data-visible="false">ID</th>
-                            <th data-field="userName">用户名</th>
-                            <th data-field="phoneNumber">电话号码</th>
-                            <th data-field="emailConfirmed" data-formatter="VerifyFormatter">邮箱是否验证(不验证邮箱无法登录)</th>
-                            <th data-field="phoneNumberConfirmed" data-formatter="VerifyFormatter">手机是否验证</th>
-                            <th data-field="accessFailedCount">登录失败次数</th>
+                            <th data-field="id" data-sortable="true" data-visible="false">Id</th>
+                            <th data-field="clientId">ClientId</th>
+                            <th data-field="clientSecrets" data-visible="false">ClientSecrets</th>
+                            <th data-field="requireClientSecret" data-visible="false">RequireClientSecret</th>
+                            <th data-field="clientName">ClientName</th>
+                            <th data-field="clientUri" data-visible="false">ClientUri</th>
+                            <th data-field="description">Description</th>
+                            <th data-field="allowAccessTokensViaBrowser">AllowAccessTokensViaBrowser</th>
+                            <th data-field="requireConsent">RequireConsent</th>
+
+                            <th data-field="allowedGrantTypes">AllowedGrantTypes</th>
+                            <th data-field="redirectUris">RedirectUris</th>
+                            <th data-field="postLogoutRedirectUris">PostLogoutRedirectUris</th>
+                            <th data-field="frontChannelLogoutUri">FrontChannelLogoutUri</th>
+                            <th data-field="frontChannelLogoutSessionRequired">FrontChannelLogoutSessionRequired</th>
+                            <th data-field="alwaysSendClientClaims">AlwaysSendClientClaims</th>
+                            <th data-field="alwaysIncludeUserClaimsInIdToken">AlwaysIncludeUserClaimsInIdToken</th>
+                            <th data-field="allowOfflineAccess">AllowOfflineAccess</th>
+
+                            <th data-field="allowedScopes">AllowedScopes</th>
+
                         </tr>
                     </thead>
 
@@ -81,7 +96,7 @@
 </div>
 
 <!-- 模态窗口 新增 -->
-<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="addClientModal" tabindex="-1" role="dialog" aria-hidden="true">
     @*<div class="modal fade bs-example-modal-lg" id="addRoleModal" tabindex="-1" role="dialog" aria-hidden="true">*@
     <div class="modal-dialog ">
         @*<div class="modal-dialog modal-lg">*@
@@ -91,21 +106,21 @@
                 <button type="button" class="close" data-dismiss="modal">
                     <span aria-hidden="true">×</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">新增用户</h4>
+                <h4 class="modal-title" id="myModalLabel">新增Client</h4>
             </div>
             <div class="modal-body">
                 <form role="form" class="form-horizontal" method="post" name="formid" id="formid" action="~/UserManage/Register">
                     <div class="form-group">
-                        <label class="col-lg-2 col-sm-2 control-label">用户名</label>
+                        <label class="col-lg-2 col-sm-2 control-label">ClientId</label>
                         <div class="col-lg-10">
-                            <input type="text" placeholder="请输入Email作为用户名" id="Email" datatype="e" name="Email" class="form-control" nullmsg="请输入Email作为用户名！" required="required" errormsg="请填写正确的Email地址">
+                            <input type="text" placeholder="请输入ClientId" id="ClientId"  name="ClientId" class="form-control" nullmsg="请输入ClientId！" required="required" >
                             @*<p class="help-block">Example block-level help text here.</p>*@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-sm-2 control-label">密码</label>
+                        <label class="col-lg-2 col-sm-2 control-label">ClientName</label>
                         <div class="col-lg-10">
-                            <input type="password" placeholder="密码" id="Password" datatype="*6-16" required="required" name="Password" class="form-control" nullmsg="请设置密码！" errormsg="密码范围在6~16位之间！">
+                            <input type="password" placeholder="ClientName" id="ClientName"  required="required" name="ClientName" class="form-control" nullmsg="请输入ClientName！" >
                         </div>
                     </div>
                     <div class="form-group">
@@ -209,7 +224,7 @@
 
         });
         $('#table').bootstrapTable({
-            url: '/UserManage/AllUserList',
+            url: '/ClientManage/AllClientList',
             method: 'POST',
             contentType: 'application/x-www-form-urlencoded',
             pageNumber: 1,
@@ -217,7 +232,7 @@
             pageSize: 15,
             pageList: [15, 20, 30, 50],
             sortable: true,
-            height: "100%",
+            //height: "100%",
             sortOrder: 'desc',
             sidePagination: "server",
             silentSort: false,
@@ -396,13 +411,7 @@
             }
         }
     });
-    function VerifyFormatter(value, row) {
-        var icon = '<span class="btn btn-sm btn-success">已验证</span>';
-        if (!value) {
-            icon = '<span class="btn btn-sm btn-danger" id="phoneok">未验证</span>';
-        }
-        return icon;
-    };
+
 
 
 </script>

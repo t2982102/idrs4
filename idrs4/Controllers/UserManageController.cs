@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using idrs4.Filter;
 using idrs4.Models;
 using idrs4.Models.AccountViewModels;
 using idrs4.Models.bootstrapTableList;
@@ -31,7 +32,7 @@ namespace idrs4.Controllers
             _smsSender = smsSender;
         }
         [HttpPost]
-        
+        [MyAuthorizationFilter(permission = "UserManage.Add")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
@@ -103,10 +104,15 @@ namespace idrs4.Controllers
 
 
         [HttpPost]
-        public IActionResult AllUserList(int offset, int limit, string order)
+        [MyAuthorizationFilter(permission = "UserManage.List")]
+        public IActionResult AllUserList(int offset, int limit, string order,string search)
         {
             UserList rlist = new UserList();
             var allroles = _userManager.Users;
+            if (!string.IsNullOrEmpty(search))
+            {
+                allroles = allroles.Where(c => c.UserName.Contains(search));
+            }
             rlist.total = allroles.Count();
             if (limit != 0)
             {
@@ -155,6 +161,7 @@ namespace idrs4.Controllers
         }
 
         [HttpPost]
+        [MyAuthorizationFilter(permission = "UserManage.Del")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             Result rs = new Result();
@@ -195,6 +202,28 @@ namespace idrs4.Controllers
             }
             return Json(rs);
         }
+        // 以防万一角色赋值删除这种情况
+        [HttpGet]
+        public async Task<IActionResult> UserToRoleByGet(string[] RoleName)
+        {
+            Result rs = new Result();
+            //var user = await _userManager.FindByIdAsync(userid);
+            var user = await _userManager.GetUserAsync(User);
+            var roles = await _userManager.GetRolesAsync(user);
+            var result1 = await _userManager.RemoveFromRolesAsync(user, roles);
+            var rsroles = await _userManager.AddToRolesAsync(user, RoleName);
+            if (rsroles.Succeeded)
+            {
+                rs = Result.PassResult();
+            }
+            else
+            {
+                rs = Result.ErrorResult(-1);
+                rs.ErrorMessage = rsroles.Errors.FirstOrDefault().Description;
+            }
+            return Json(rs);
+        }
+
         [HttpPost]
         public async Task<IActionResult> SendSMS(string PhoneNumber)
         {

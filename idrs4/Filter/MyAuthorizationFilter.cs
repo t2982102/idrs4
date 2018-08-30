@@ -44,7 +44,7 @@ namespace idrs4.Filter
                 }
                 else
                 {
-                    var permissions = claims.Where(c => c.Type.Equals("permission") & c.Value.Equals(permission));
+                    var permissions = claims.Where(c => c.Type.Equals("permission") & c.Value.Equals("local."+permission));
                     if (permissions.Count() > 0)
                     {
                         return;

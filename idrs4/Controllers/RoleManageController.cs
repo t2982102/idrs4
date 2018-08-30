@@ -77,10 +77,18 @@ namespace idrs4.Controllers
         }
 
         [HttpPost]
-        public IActionResult AllRoleList(int offset, int limit, string order)
+        public IActionResult AllRoleList(int offset, int limit, string order,string search,string clientname)
         {
             RoleList rlist = new RoleList();
             var allroles = _roleMangeer.Roles;
+            if (!string.IsNullOrEmpty(search))
+            {
+                allroles = allroles.Where(c => c.Name.Contains(search));
+            }
+            if (!string.IsNullOrEmpty(clientname))
+            {
+                allroles = allroles.Where(c => c.ClientName.Equals(clientname));
+            }
             rlist.total = allroles.Count();
             if (limit != 0)
             {

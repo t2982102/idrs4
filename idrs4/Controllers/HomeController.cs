@@ -14,7 +14,7 @@ namespace idrs4.Controllers
     
     public class HomeController : Controller
     {
-        [MyAuthorizationFilter(permission = "projects.view")]
+        [MyAuthorizationFilter(permission = "Home.View")]
         public IActionResult Index()
         {
             return View();

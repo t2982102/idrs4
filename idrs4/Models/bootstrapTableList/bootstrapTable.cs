@@ -1,7 +1,5 @@
-﻿using System;
+﻿using idrs4.PoJo;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace idrs4.Models.bootstrapTableList
 {
@@ -13,6 +11,19 @@ namespace idrs4.Models.bootstrapTableList
     public class UserList
     {
         public List<ApplicationUser> rows { get; set; }
+        public int total { get; set; }
+    }
+
+    public class PermissionList
+    {
+
+        public List<ApplicationPermission> rows { get; set;}
+        public int total { get; set; }
+    }
+
+    public class ClientManageList
+    {
+        public List<ClientTablePoJo> rows { get; set; }
         public int total { get; set; }
     }
 }

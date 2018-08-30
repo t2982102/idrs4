@@ -21,6 +21,13 @@ namespace idrs4.Models
         public string ClientName { get; set; }
     }
 
+    public class ApplicationPermission
+    {
+        public string PermissionType { get; set; }
+        public string PermissionValue { get; set; }
+
+        public string RoleName { get; set; }
+    }
 
    
 }

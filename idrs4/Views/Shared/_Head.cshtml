@@ -1,11 +1,14 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using idrs4.Models
 
+
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @{
     var user = await UserManager.GetUserAsync(User);
+
     
+
 
 }
 
